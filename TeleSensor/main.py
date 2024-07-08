@@ -1,13 +1,22 @@
-######################################################################################################
-# UTD (University of Texas Dallas) - CS4485 - Project
-# Professor: Miguel Razo-Razo
-# Company: Tele Sensor (Cardio IO)
-# Responsible: Sajol Ghoshal, Wayne Hohman, Steven Smith
-# Authors: Raad Ahammad, Tamer Alaeddin, Nathaniel Faust, Nora Hanna, Celio Kelly, Joseph Saber
-# Date: June 27, 2024
-######################################################################################################
+"""
+    Institution='UTD (University of Texas Dallas)',
+    Course='CS4485 - Project',
+    Professor='Miguel Razo-Razo',
+    Company='Tele Sensor (Cardio IO)',
+    Responsible='Sajol Ghoshal, Wayne Hohman, Steven Smith',
+    Project='Cardio IO Heart Rate Metrics comparison',
+    Version='0.1',
+    Github_url='https://github.com/Cowpira/Cardio-IO',
+    Download_url='https://drive.google.com/drive/folders/1FAux5hlM9ubSIHf9YSaKAq3JJ6GP7lWH?exids=71471483,71471477',
+    License='TeleSensor',
+    Authors='Raad Ahammad, Tamer Alaeddin, Nathaniel Faust, Nora Hanna, Celio Kelly, Joseph Saber',
+    Description='GUI for the Cardio IO heart rate monitor.',
+    Started='July 2, 2024',
+    Delivered='yet in development'
+"""
 
-# packages imports
+######################################################################################################
+# packages & frameworks imports
 import tkinter as tk
 import customtkinter
 import ttkbootstrap as tkb
@@ -17,6 +26,9 @@ from tkinter.filedialog import askopenfile
 # project imports
 from dialogs.metrics_desc import MetricsDesc
 from dialogs.user_guide import UserGuide
+
+######################################################################################################
+
 
 #######################################################################################################
 # <region desc="setting windows home_page, search_page & result_page">
@@ -28,6 +40,7 @@ main_x = (window.winfo_screenwidth() // 2) - (680 // 2)
 main_y = (window.winfo_screenheight() // 2) - (500 // 3)
 window.geometry('{}x{}+{}+{}'.format(680, 500, main_x, main_y))
 window.resizable(False, False)
+
 
 # <endregion>
 #######################################################################################################
@@ -42,6 +55,7 @@ def set_dialog_window(dialog_frame):
     dialog_frame.geometry('{}x{}+{}+{}'.format(428, 390, x, y))
     dialog_frame.resizable(False, False)
 
+
 # <endregion>
 #######################################################################################################
 
@@ -55,6 +69,7 @@ def sett_dialog_window(dialog_frame):
     dialog_frame.geometry('{}x{}+{}+{}'.format(428, 270, x, y))
     dialog_frame.resizable(False, False)
 
+
 # <endregion>
 #######################################################################################################
 
@@ -66,6 +81,7 @@ tkb_style = tkb.Style()
 tkb_style.configure('primary.TButton', font=("Roboto", 23))
 tkb_style.configure('TCheckbutton', font=("Roboto", 25))
 tkb_style.configure('secondary.Treeview', rowheight=25)
+
 # <endregion>
 #######################################################################################################
 
@@ -111,12 +127,13 @@ customtkinter.CTkLabel(menu, text="", image=logo).place(x=0, y=0)
 
 menu.pack_propagate(False)
 menu.pack()
+
 # <endregion>
 #######################################################################################################
 
 
 #######################################################################################################
-# create a main frame
+# <region desc="main_frame">
 main_frame = tkb.Frame(window)
 main_frame.pack(fill=tkb.BOTH, expand=True)
 
@@ -344,6 +361,7 @@ def result_page():
 
     result_frame.pack(fill=tkb.BOTH, expand=True)
 
+
 # <endregion>
 #######################################################################################################
 
@@ -384,6 +402,7 @@ def save_result():
                             hover_color="#424242", font=('Roboto', 18),
                             command=lambda: autosave(save_frame)).place(x=235, y=295)
 
+
 # <endregion>
 #######################################################################################################
 
@@ -422,6 +441,8 @@ def autosave(frame_caller):
                             command=lambda: switch_dialog(autosave_frame)).place(x=235, y=295)
 
     frame_caller.destroy()
+
+
 # <endregion>
 #######################################################################################################
 
@@ -449,6 +470,7 @@ def success_dialog(frame_caller):
                             fg_color="#1976D2", hover_color="#424242", font=('Roboto', 18),
                             command=lambda: success_frame.destroy()).place(x=165, y=190)
     frame_caller.destroy()
+
 
 # <endregion>
 #######################################################################################################
@@ -478,6 +500,7 @@ def fail_dialog(frame_caller):
                             command=lambda: fail_frame.destroy()).place(x=165, y=190)
     frame_caller.destroy()
 
+
 # <endregion>
 #######################################################################################################
 
@@ -504,6 +527,7 @@ def print_dialog():
     customtkinter.CTkButton(print_frame, text='OK', width=100, height=48, compound="left",
                             fg_color="#1976D2", hover_color="#424242", font=('Roboto', 18),
                             command=lambda: print_frame.destroy()).place(x=165, y=190)
+
 
 # <endregion>
 #######################################################################################################
@@ -545,6 +569,7 @@ def processing_page():
                             command=lambda: switch_pages(page=home_page)).place(x=245, y=355)
 
     processing_frame.pack(fill=tkb.BOTH, expand=True)
+
 
 # <endregion>
 #######################################################################################################
@@ -605,6 +630,7 @@ def recent_result_table(search_frame):
 
             col3 += 40
 
+
 # <endregion>
 #######################################################################################################
 
@@ -614,6 +640,7 @@ def recent_result_table(search_frame):
 def switch_dialog(frame_caller):
     frame_caller.destroy()
     save_result()
+
 # <endregion>
 #######################################################################################################
 
