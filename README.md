@@ -10,5 +10,27 @@
     Sajol Ghoshal, Wayne Hohman, Steven Smith
 ### Authors: 
     Raad Ahammad, Tamer Alaeddin, Nathaniel Faust, Nora Hanna, Celio Kelly, Joseph Saber
-    
-### Date: June 27, 2024
+
+## Development Timeline
+
+### Development began: July 2, 2024
+### GUI V1 done: July 8, 2024
+
+<hr />
+
+### Development Tools
+
+#### IDE
+        * PyCharm
+#### Language
+        * Python
+        
+#### Framewor (packages)
+        * Tkinter
+        * CustomTkinter
+        * Ttkbootstrap
+
+#### Images (FlatIcon)
+        * Source: https://www.flaticon.com
+        
+ Note: the images used is free for none comercial project and the source must be referenced for free usege.
