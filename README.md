@@ -1,11 +1,12 @@
-# UTD (University of Texas Dallas) - CS4485 - Project
+## UTD (University of Texas Dallas)
 <hr />
 
-### Professor:                                
+### Professor/ Course:
       Miguel Razo-Razo
+      CS4485 - Project
 ### Company: 
     Tele Sensor (Cardio IO)
-### Responsible: 
+### Responsibles: 
     Sajol Ghoshal, Wayne Hohman, Steven Smith
 ### Authors: 
     Raad Ahammad, Tamer Alaeddin, Nathaniel Faust, Nora Hanna, Celio Kelly, Joseph Saber
