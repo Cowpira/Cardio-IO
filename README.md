@@ -11,10 +11,10 @@
 ### Authors: 
     Raad Ahammad, Tamer Alaeddin, Nathaniel Faust, Nora Hanna, Celio Kelly, Joseph Saber
 
-## Development Timeline
+## Development Schedules
 
-### Development began: July 2, 2024
-### GUI V1 done: July 8, 2024
+##### Development began: July 2, 2024
+##### GUI V1 done: July 8, 2024
 
 <hr />
 
