@@ -30,7 +30,7 @@
         * CustomTkinter
         * Ttkbootstrap
 
-#### Images (FlatIcon)
+#### Images/ Icons (FlatIcon)
         * Source: https://www.flaticon.com
         
  Note: the images used is free for none comercial project and the source must be referenced for free usege.
