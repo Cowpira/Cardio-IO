@@ -25,7 +25,7 @@
 #### Language
         * Python
         
-#### Framewor (packages)
+#### Frameworks (packages)
         * Tkinter
         * CustomTkinter
         * Ttkbootstrap
