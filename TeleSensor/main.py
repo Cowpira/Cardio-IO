@@ -27,7 +27,6 @@ from tkinter.filedialog import askopenfile
 # project imports
 from dialogs.metrics_desc import MetricsDesc
 from dialogs.user_guide import UserGuide
-
 ######################################################################################################
 
 
@@ -41,8 +40,6 @@ main_x = (window.winfo_screenwidth() // 2) - (680 // 2)
 main_y = (window.winfo_screenheight() // 2) - (500 // 3)
 window.geometry('{}x{}+{}+{}'.format(680, 500, main_x, main_y))
 window.resizable(False, False)
-
-
 # <endregion>
 #######################################################################################################
 
@@ -55,8 +52,6 @@ def set_dialog_window(dialog_frame):
     y = (dialog_frame.winfo_screenheight() // 2) - (390 // 3)
     dialog_frame.geometry('{}x{}+{}+{}'.format(428, 390, x, y))
     dialog_frame.resizable(False, False)
-
-
 # <endregion>
 #######################################################################################################
 
@@ -69,20 +64,16 @@ def sett_dialog_window(dialog_frame):
     y = (dialog_frame.winfo_screenheight() // 2) - (270 // 3)
     dialog_frame.geometry('{}x{}+{}+{}'.format(428, 270, x, y))
     dialog_frame.resizable(False, False)
-
-
 # <endregion>
 #######################################################################################################
 
 
 #######################################################################################################
-
 # <region desc="styling elements">
 tkb_style = tkb.Style()
 tkb_style.configure('primary.TButton', font=("Roboto", 23))
 tkb_style.configure('TCheckbutton', font=("Roboto", 25))
 tkb_style.configure('secondary.Treeview', rowheight=25)
-
 # <endregion>
 #######################################################################################################
 
@@ -96,8 +87,6 @@ helper = customtkinter.CTkImage(light_image=Image.open("image/manual.png"),
 
 eye = customtkinter.CTkImage(light_image=Image.open("image/eye.png"),
                              dark_image=Image.open("image/eye.png"), size=(18, 18))
-
-
 # <endregion>
 #######################################################################################################
 
@@ -110,8 +99,17 @@ def switch_pages(page):
         window.update()
 
     page()
+# <endregion>
+#######################################################################################################
 
 
+#######################################################################################################
+# <region desc="getting all CSV files from a directory/ sub-directory">
+def get_all_csv(data_store):
+    for path, subdir, files in os.walk("Patient_Library"):
+        for file in files:
+            if file.endswith(".csv"):
+                data_store.append(file)
 # <endregion>
 #######################################################################################################
 
@@ -128,7 +126,6 @@ customtkinter.CTkLabel(menu, text="", image=logo).place(x=0, y=0)
 
 menu.pack_propagate(False)
 menu.pack()
-
 # <endregion>
 #######################################################################################################
 
@@ -137,7 +134,6 @@ menu.pack()
 # <region desc="main_frame">
 main_frame = tkb.Frame(window)
 main_frame.pack(fill=tkb.BOTH, expand=True)
-
 
 # <endregion>
 #######################################################################################################
@@ -152,8 +148,6 @@ def return_page():
     customtkinter.CTkButton(menu, image=return_btn, text='Return ', width=37, height=36, compound="left",
                             fg_color="#1976D2", hover_color="#424242", corner_radius=5,
                             command=lambda: switch_pages(page=home_page)).place(x=578, y=6)
-
-
 # <endregion>
 #######################################################################################################
 
@@ -171,8 +165,6 @@ def masking_buttons():
     # mak button return on processing screen
     customtkinter.CTkButton(menu, text='', width=170, height=40,
                             fg_color="#FFFFFF", state='disabled').place(x=406, y=5)
-
-
 # <endregion>
 #######################################################################################################
 
@@ -192,44 +184,52 @@ def home_page():
 
     # method to upload a file
     tkb.Label(home_frame, text="Select file(s)", font=('Roboto', 25)).place(x=130, y=10)
-
-    # listbox to list CSV files
-    list_items = tk.Listbox(home_frame, selectmode="multiple", width=40, height=11, font=('Verdana', 14),
-                            activestyle="dotbox")
-    list_items.place(x=130, y=45)
+    tkb.Label(home_frame, text="File accepted .CSV", foreground='#424242', font=('Roboto', 12)).place(x=130, y=255)
 
     # getting all CSV files from directory and subdirectories
     # NOTE: the code still loading files from local directory 'Patient_Library'
     csv_file_list = []
-    for path, subdir, files in os.walk("Patient_Library"):
-        for file in files:
-            if file.endswith(".csv"):
-                csv_file_list.append(file)
+    get_all_csv(csv_file_list)
+
+    # list all CSV files into listbox
+    list_items = tk.Listbox(home_frame, selectmode="multiple", width=50, font=('Arial', 13), border=4,
+                            selectborderwidth=2)
+    list_items.place(x=130, y=45)
 
     # listing all files into the listbox
     for each_item in range(len(csv_file_list)):
         list_items.insert(END, csv_file_list[each_item])
-        list_items.itemconfig(each_item, bg="#EEEEEE", foreground="#212121")
+        list_items.itemconfigure(each_item, selectbackground='#4CAF50')
 
-    tkb.Label(home_frame, text="File accepted .CSV", foreground='#424242', font=('Roboto', 13)).place(x=130, y=250)
+    cbx_state = tk.IntVar()
 
-    customtkinter.CTkCheckBox(master=home_frame, text="Process by metrics", width=25, height=25, font=("Roboto", 22),
-                              fg_color="#2196F3", hover_color="#424242", text_color="#212121",
-                              offvalue="off").place(x=130, y=285)
+    def select_all():
+        print(cbx_state.get())
+        if cbx_state.get():
+            list_items.select_set(0, END)
+        else:
+            list_items.select_clear(0, END)
+
+    # button to select all items once
+    select_all_cbx = customtkinter.CTkCheckBox(home_frame, text="Select All", font=('Roboto', 12), width=10, height=6,
+                                               hover_color="#424242", fg_color='#4CAF50', text_color="#212121",
+                                               variable=cbx_state, command=select_all)
+    select_all_cbx.place(x=455, y=257)
 
     tkb.Button(home_frame, text="Click to learn more", style='primary.link.TButton',
-               command=MetricsDesc).place(x=150, y=310)
+               command=MetricsDesc).place(x=150, y=318)
+
+    customtkinter.CTkCheckBox(master=home_frame, text="Process by metrics", width=25, height=25, font=("Roboto", 22),
+                              fg_color="#4CAF50", hover_color="#424242", text_color="#212121").place(x=130, y=295)
 
     customtkinter.CTkButton(home_frame, text='PROCESS', width=170, height=48, fg_color="#1976D2", hover_color="#424242",
-                            font=('Roboto', 18), command=lambda: switch_pages(page=processing_page)).place(x=250, y=355)
+                            font=('Roboto', 18), command=lambda: switch_pages(page=processing_page)).place(x=250, y=358)
 
     # button for help
     customtkinter.CTkButton(home_frame, image=helper, text='', width=29, height=32, compound="left", fg_color="#FFFFFF",
                             hover_color="#424242", corner_radius=5, command=UserGuide).place(x=638, y=408)
 
     home_frame.pack(fill=tkb.BOTH, expand=True)
-
-
 # <endregion>
 #######################################################################################################
 
@@ -257,6 +257,7 @@ def search_page():
     customtkinter.CTkButton(search_frame, image=upload_btn, text='SELECT FILE', width=50, height=40, compound="left",
                             fg_color="#424242", hover_color="#90A4AE", corner_radius=24,
                             command=lambda: search_file()).place(x=85, y=83)
+
     tkb.Label(search_frame, text="File accepted .CSV", font=('Roboto', 13)).place(x=90, y=129)
 
     customtkinter.CTkButton(search_frame, text='REVIEW RESULT', width=170, height=48, fg_color="#1976D2",
@@ -325,28 +326,35 @@ def result_page():
     clients = ["John Rave", "Wanda Smith", "Steve Long", "Simone Cole", "Shawn Pat", "Sarah Jones", 'Mark Paul',
                'Ray Allen', 'Maria Hall']
 
-    # slide bar
-    slide_bar = customtkinter.CTkTabview(result_frame, width=680, height=61)
-    slide_bar.place(x=0, y=-20)
-
     def list_result(value):
         lbl_result.configure(text=value + ' Result')
 
-    customtkinter.CTkSegmentedButton(slide_bar,  values=clients, font=('Roboto', 14), width=80, fg_color='#616161',
-                                     selected_color='#4CAF50', unselected_hover_color='#212121',
-                                     selected_hover_color='#212121', unselected_color='#616161',
-                                     corner_radius=0, command=list_result).place(x=15, y=25)
+    # adding scroll to the slide bar
+    x_scroll = tk.Scrollbar(result_frame, orient=tk.HORIZONTAL)
+    x_scroll.place(x=0, y=0)
 
-    # adding navigation to tabview
+    # slide bar
+    # slide_bar = customtkinter.CTkTabview(result_frame, width=680, height=61)
+    slide_bar = tk.Listbox(result_frame, width=680, height=2, xscrollcommand=x_scroll.set)
+    slide_bar.place(x=0, y=0)
+
+    customtkinter.CTkSegmentedButton(slide_bar,  values=clients, font=('Roboto', 14), width=80, fg_color='#616161',
+                                     selected_color='#4CAF50', unselected_hover_color='#212121', corner_radius=0,
+                                     selected_hover_color='#212121', unselected_color='#616161',
+                                     command=list_result).place(x=15, y=3)
+
+    x_scroll.config(command=slide_bar.xview)
+
+    """# adding navigation to tabview
     left = customtkinter.CTkImage(light_image=Image.open("image/left.png"),
                                   dark_image=Image.open("image/left.png"), size=(24, 24))
     customtkinter.CTkButton(slide_bar, image=left, text='', width=20, height=40, compound="left", fg_color="#212121",
-                            hover_color='#BDBDBD', corner_radius=0, ).place(x=0, y=20)
+                            hover_color='#BDBDBD', corner_radius=0, ).place(x=0, y=0)
 
     right = customtkinter.CTkImage(light_image=Image.open("image/next.png"),
                                    dark_image=Image.open("image/next.png"), size=(24, 24))
     customtkinter.CTkButton(slide_bar, image=right, text='', width=30, height=40, compound="left", fg_color="#212121",
-                            hover_color='#BDBDBD', corner_radius=0).place(x=647, y=20)
+                            hover_color='#BDBDBD', corner_radius=0).place(x=647, y=0)"""
 
     # recent results panel
     recent_tab = customtkinter.CTkTabview(result_frame, width=600, height=165, corner_radius=12, fg_color="#EEEEEE",
@@ -395,7 +403,6 @@ def result_page():
 
     result_frame.pack(fill=tkb.BOTH, expand=True)
 
-
 # <endregion>
 #######################################################################################################
 
@@ -435,8 +442,6 @@ def save_result():
     customtkinter.CTkButton(save_frame, text='CANCEL', width=100, height=48, compound="left", fg_color="#1976D2",
                             hover_color="#424242", font=('Roboto', 18),
                             command=lambda: autosave(save_frame)).place(x=235, y=295)
-
-
 # <endregion>
 #######################################################################################################
 
@@ -475,8 +480,6 @@ def autosave(frame_caller):
                             command=lambda: switch_dialog(autosave_frame)).place(x=235, y=295)
 
     frame_caller.destroy()
-
-
 # <endregion>
 #######################################################################################################
 
@@ -504,8 +507,6 @@ def success_dialog(frame_caller):
                             fg_color="#1976D2", hover_color="#424242", font=('Roboto', 18),
                             command=lambda: success_frame.destroy()).place(x=165, y=190)
     frame_caller.destroy()
-
-
 # <endregion>
 #######################################################################################################
 
@@ -533,8 +534,6 @@ def fail_dialog(frame_caller):
                             fg_color="#1976D2", hover_color="#424242", font=('Roboto', 18),
                             command=lambda: fail_frame.destroy()).place(x=165, y=190)
     frame_caller.destroy()
-
-
 # <endregion>
 #######################################################################################################
 
@@ -561,8 +560,6 @@ def print_dialog():
     customtkinter.CTkButton(print_frame, text='OK', width=100, height=48, compound="left",
                             fg_color="#1976D2", hover_color="#424242", font=('Roboto', 18),
                             command=lambda: print_frame.destroy()).place(x=165, y=190)
-
-
 # <endregion>
 #######################################################################################################
 
@@ -603,8 +600,6 @@ def processing_page():
                             command=lambda: switch_pages(page=home_page)).place(x=245, y=355)
 
     processing_frame.pack(fill=tkb.BOTH, expand=True)
-
-
 # <endregion>
 #######################################################################################################
 
@@ -663,8 +658,6 @@ def recent_result_table(search_frame):
             client_name.place(x=posix + 370, y=col3)
 
             col3 += 40
-
-
 # <endregion>
 #######################################################################################################
 
@@ -675,11 +668,12 @@ def switch_dialog(frame_caller):
     frame_caller.destroy()
     save_result()
 
-
 # <endregion>
 #######################################################################################################
 
 
+#######################################################################################################
+# <region desc="load home page and run the program">
 home_page()
 window.mainloop()
 #######################################################################################################
