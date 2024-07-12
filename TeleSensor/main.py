@@ -14,10 +14,11 @@
     Started='July 2, 2024',
     Delivered='yet in development'
 """
-
 ######################################################################################################
 # packages & frameworks imports
+import os
 import tkinter as tk
+from tkinter import END
 import customtkinter
 import ttkbootstrap as tkb
 from PIL import Image
@@ -190,32 +191,37 @@ def home_page():
                             command=lambda: switch_pages(page=search_page)).place(x=578, y=6)
 
     # method to upload a file
-    tkb.Label(home_frame, text="Upload file(s)", font=('Roboto', 25)).place(x=165, y=27)
+    tkb.Label(home_frame, text="Select file(s)", font=('Roboto', 25)).place(x=130, y=10)
 
-    # function to upload file to be processed
-    def upload_file():
-        file = tk.filedialog.askopenfilename(title='Select file...',
-                                             filetypes=[("CVS file", "*.cvs"), ("XLSX file", "*.xlsx")])
+    # listbox to list CSV files
+    list_items = tk.Listbox(home_frame, selectmode="multiple", width=40, height=11, font=('Verdana', 14),
+                            activestyle="dotbox")
+    list_items.place(x=130, y=45)
 
-        tkb.Label(home_frame, style='dark', text='File selected: ' + str(format(file)), border=2, wraplength=420,
-                  font=('Roboto', 13)).place(x=177, y=130)
+    # getting all CSV files from directory and subdirectories
+    # NOTE: the code still loading files from local directory 'Patient_Library'
+    csv_file_list = []
+    for path, subdir, files in os.walk("Patient_Library"):
+        for file in files:
+            if file.endswith(".csv"):
+                csv_file_list.append(file)
 
-    # upload button
-    customtkinter.CTkButton(home_frame, image=upload_btn, text='SELECT FILE', width=50, height=40, compound="left",
-                            fg_color="#424242", hover_color="#90A4AE", corner_radius=24,
-                            command=lambda: upload_file()).place(x=170, y=67)
-    tkb.Label(home_frame, text="File accepted .CVS", font=('Roboto', 13)).place(x=177, y=112)
+    # listing all files into the listbox
+    for each_item in range(len(csv_file_list)):
+        list_items.insert(END, csv_file_list[each_item])
+        list_items.itemconfig(each_item, bg="#EEEEEE", foreground="#212121")
+
+    tkb.Label(home_frame, text="File accepted .CSV", foreground='#424242', font=('Roboto', 13)).place(x=130, y=250)
 
     customtkinter.CTkCheckBox(master=home_frame, text="Process by metrics", width=25, height=25, font=("Roboto", 22),
                               fg_color="#2196F3", hover_color="#424242", text_color="#212121",
-                              offvalue="off").place(x=175, y=183)
+                              offvalue="off").place(x=130, y=285)
 
     tkb.Button(home_frame, text="Click to learn more", style='primary.link.TButton',
-               command=MetricsDesc).place(x=165, y=212)
+               command=MetricsDesc).place(x=150, y=310)
 
-    customtkinter.CTkButton(home_frame, text='PROCESS', width=170, height=48, compound="left",
-                            fg_color="#1976D2", hover_color="#424242", font=('Roboto', 18),
-                            command=lambda: switch_pages(page=processing_page)).place(x=250, y=298)
+    customtkinter.CTkButton(home_frame, text='PROCESS', width=170, height=48, fg_color="#1976D2", hover_color="#424242",
+                            font=('Roboto', 18), command=lambda: switch_pages(page=processing_page)).place(x=250, y=355)
 
     # button for help
     customtkinter.CTkButton(home_frame, image=helper, text='', width=29, height=32, compound="left", fg_color="#FFFFFF",
@@ -242,7 +248,7 @@ def search_page():
     # method to upload file
     def search_file():
         file = tk.filedialog.askopenfilename(title='Select file...',
-                                             filetypes=[("CVS file", "*.cvs"), ("XLSX file", "*.xlsx")])
+                                             filetypes=[("CSV file", "*.csv"), ("XLSX file", "*.xlsx")])
 
         tkb.Label(search_frame, style='dark', text='File selected: ' + str(format(file)), border=2, wraplength=420,
                   font=('Roboto', 13)).place(x=242, y=94)
@@ -251,10 +257,10 @@ def search_page():
     customtkinter.CTkButton(search_frame, image=upload_btn, text='SELECT FILE', width=50, height=40, compound="left",
                             fg_color="#424242", hover_color="#90A4AE", corner_radius=24,
                             command=lambda: search_file()).place(x=85, y=83)
-    tkb.Label(search_frame, text="File accepted .CVS", font=('Roboto', 13)).place(x=90, y=129)
+    tkb.Label(search_frame, text="File accepted .CSV", font=('Roboto', 13)).place(x=90, y=129)
 
-    customtkinter.CTkButton(search_frame, text='REVIEW RESULT', width=170, height=48, compound="left",
-                            fg_color="#1976D2", hover_color="#424242", font=('Roboto', 18),
+    customtkinter.CTkButton(search_frame, text='REVIEW RESULT', width=170, height=48, fg_color="#1976D2",
+                            hover_color="#424242", font=('Roboto', 18),
                             command=lambda: switch_pages(page=result_page)).place(x=250, y=155)
 
     # recent results panel
@@ -282,7 +288,6 @@ def search_page():
                             hover_color="#424242", corner_radius=5, command=UserGuide).place(x=638, y=408)
 
     search_frame.pack(fill=tkb.BOTH, expand=True)
-
 
 # <endregion>
 #######################################################################################################
@@ -316,48 +321,77 @@ def result_page():
                             fg_color="#1976D2", hover_color="#424242", corner_radius=5,
                             command=lambda: switch_pages(page=search_page)).place(x=578, y=6)
 
-    # recent results panel
-    recent_tab = customtkinter.CTkTabview(result_frame, width=600, height=170, corner_radius=12, fg_color="#EEEEEE")
-    recent_tab.place(x=35, y=-4)
+    # function to list clients into the slider
+    clients = ["John Rave", "Wanda Smith", "Steve Long", "Simone Cole", "Shawn Pat", "Sarah Jones", 'Mark Paul',
+               'Ray Allen', 'Maria Hall']
 
-    tkb.Label(result_frame, text="Result", foreground="#01579B", background="#EEEEEE",
-              font=('Roboto', 23)).place(x=310, y=25)
+    # slide bar
+    slide_bar = customtkinter.CTkTabview(result_frame, width=680, height=61)
+    slide_bar.place(x=0, y=-20)
+
+    def list_result(value):
+        lbl_result.configure(text=value + ' Result')
+
+    customtkinter.CTkSegmentedButton(slide_bar,  values=clients, font=('Roboto', 14), width=80, fg_color='#616161',
+                                     selected_color='#4CAF50', unselected_hover_color='#212121',
+                                     selected_hover_color='#212121', unselected_color='#616161',
+                                     corner_radius=0, command=list_result).place(x=15, y=25)
+
+    # adding navigation to tabview
+    left = customtkinter.CTkImage(light_image=Image.open("image/left.png"),
+                                  dark_image=Image.open("image/left.png"), size=(24, 24))
+    customtkinter.CTkButton(slide_bar, image=left, text='', width=20, height=40, compound="left", fg_color="#212121",
+                            hover_color='#BDBDBD', corner_radius=0, ).place(x=0, y=20)
+
+    right = customtkinter.CTkImage(light_image=Image.open("image/next.png"),
+                                   dark_image=Image.open("image/next.png"), size=(24, 24))
+    customtkinter.CTkButton(slide_bar, image=right, text='', width=30, height=40, compound="left", fg_color="#212121",
+                            hover_color='#BDBDBD', corner_radius=0).place(x=647, y=20)
+
+    # recent results panel
+    recent_tab = customtkinter.CTkTabview(result_frame, width=600, height=165, corner_radius=12, fg_color="#EEEEEE",
+                                          border_color='red')
+    recent_tab.place(x=35, y=40)
+
+    lbl_result = customtkinter.CTkButton(result_frame, text='RESULT', width=160, height=33, fg_color="#4CAF50",
+                                         font=('Roboto', 18, 'bold'), state='disable')
+    lbl_result.place(x=260, y=48)
 
     # adding labels from result
-    tkb.Label(result_frame, text="Date: ", foreground="#212121", background="#EEEEEE",
-              font=('Roboto', 15)).place(x=50, y=68)
-    tkb.Label(result_frame, text="March 7, 2024", foreground="#01579B", background="#EEEEEE",
-              font=('Roboto', 16)).place(x=88, y=68)
+    tkb.Label(result_frame, text="Date: ", foreground="#616161", background="#EEEEEE",
+              font=('Roboto', 15)).place(x=50, y=98)
+    tkb.Label(result_frame, text="March 7, 2024", foreground="#388E3C", background="#EEEEEE",
+              font=('Roboto', 16)).place(x=88, y=98)
 
-    tkb.Label(result_frame, text="Heart Rate: ", foreground="#212121", background="#EEEEEE",
-              font=('Roboto', 15)).place(x=260, y=68)
-    tkb.Label(result_frame, text="84", foreground="#01579B", background="#EEEEEE",
-              font=('Roboto', 16)).place(x=339, y=68)
+    tkb.Label(result_frame, text="Heart Rate: ", foreground="#616161", background="#EEEEEE",
+              font=('Roboto', 15)).place(x=260, y=98)
+    tkb.Label(result_frame, text="84", foreground="#388E3C", background="#EEEEEE",
+              font=('Roboto', 16)).place(x=339, y=98)
 
-    tkb.Label(result_frame, text="Metric: ", foreground="#212121", background="#EEEEEE",
-              font=('Roboto', 15)).place(x=482, y=68)
-    tkb.Label(result_frame, text="Bpm", foreground="#01579B", background="#EEEEEE",
-              font=('Roboto', 16)).place(x=531, y=68)
+    tkb.Label(result_frame, text="Metric: ", foreground="#616161", background="#EEEEEE",
+              font=('Roboto', 15)).place(x=482, y=98)
+    tkb.Label(result_frame, text="Bpm", foreground="#388E3C", background="#EEEEEE",
+              font=('Roboto', 16)).place(x=531, y=98)
 
-    tkb.Label(result_frame, text="RMS Value:", foreground="#212121", background="#EEEEEE",
-              font=('Roboto', 15)).place(x=50, y=120)
-    tkb.Label(result_frame, text="103.06", foreground="#01579B", background="#EEEEEE",
-              font=('Roboto', 16)).place(x=130, y=120)
+    tkb.Label(result_frame, text="RMS Value:", foreground="#616161", background="#EEEEEE",
+              font=('Roboto', 15)).place(x=50, y=150)
+    tkb.Label(result_frame, text="103.06", foreground="#388E3C", background="#EEEEEE",
+              font=('Roboto', 16)).place(x=130, y=150)
 
-    tkb.Label(result_frame, text="RMS Accuracy: ", foreground="#212121", background="#EEEEEE",
-              font=('Roboto', 15)).place(x=260, y=120)
-    tkb.Label(result_frame, text="88%", foreground="#01579B", background="#EEEEEE",
-              font=('Roboto', 16)).place(x=366, y=120)
+    tkb.Label(result_frame, text="RMS Accuracy: ", foreground="#616161", background="#EEEEEE",
+              font=('Roboto', 15)).place(x=260, y=150)
+    tkb.Label(result_frame, text="88%", foreground="#388E3C", background="#EEEEEE",
+              font=('Roboto', 16)).place(x=366, y=150)
 
-    tkb.Label(result_frame, text="RMS Error: ", foreground="#212121", background="#EEEEEE",
-              font=('Roboto', 15)).place(x=482, y=120)
-    tkb.Label(result_frame, text="3%", foreground="#01579B", background="#EEEEEE",
-              font=('Roboto', 16)).place(x=558, y=120)
+    tkb.Label(result_frame, text="RMS Error: ", foreground="#616161", background="#EEEEEE",
+              font=('Roboto', 15)).place(x=482, y=150)
+    tkb.Label(result_frame, text="3%", foreground="#388E3C", background="#EEEEEE",
+              font=('Roboto', 16)).place(x=558, y=150)
 
     # heart rate graph result
     rate_result = customtkinter.CTkImage(light_image=Image.open("image/heart_rate_result.png"),
-                                         dark_image=Image.open("image/heart_rate_result.png"), size=(245, 245))
-    customtkinter.CTkLabel(result_frame, text="", image=rate_result).place(x=240, y=180)
+                                         dark_image=Image.open("image/heart_rate_result.png"), size=(225, 225))
+    customtkinter.CTkLabel(result_frame, text="", image=rate_result).place(x=240, y=215)
 
     result_frame.pack(fill=tkb.BOTH, expand=True)
 
@@ -388,7 +422,7 @@ def save_result():
     # recent results panel
     info_tab = customtkinter.CTkTabview(save_frame, width=365, height=115, corner_radius=12, fg_color="#EEEEEE")
     info_tab.place(x=25, y=152)
-    tkb.Label(save_frame, text='The PDF and CVS files will be saved inside "TeleSensor_Results" folder. '
+    tkb.Label(save_frame, text='The PDF and CSV files will be saved inside "TeleSensor_Results" folder. '
                                'Both will be named as specified by the user.', justify='center', font=('Roboto', 13),
               wraplength=355, background='#EEEEEE').place(x=46, y=190)
 
@@ -426,7 +460,7 @@ def autosave(frame_caller):
     # recent results panel
     info_tab = customtkinter.CTkTabview(autosave_frame, width=350, height=135, corner_radius=12, fg_color="#FAE496")
     info_tab.place(x=40, y=118)
-    tkb.Label(autosave_frame, text='The system will automatically save a PDF and CVS files into a folder '
+    tkb.Label(autosave_frame, text='The system will automatically save a PDF and CSV files into a folder '
                                    '"unnamedResults."\n\n Both will be labeled with the current date.',
               justify='center', font=('Roboto', 14), background="#FAE496", wraplength=320).place(x=65, y=158)
 
@@ -640,6 +674,7 @@ def recent_result_table(search_frame):
 def switch_dialog(frame_caller):
     frame_caller.destroy()
     save_result()
+
 
 # <endregion>
 #######################################################################################################
