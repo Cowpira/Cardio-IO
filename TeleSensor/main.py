@@ -58,6 +58,8 @@ def auto_load_csv(auto_load_data):
             if file.endswith(".csv") and str.__contains__(file, 'Res'):
                 auto_load_data.append(file)
 
+    structure_results(auto_load_data)
+
 
 # loading files from selected directory
 def load_from_dir_csv(load_from_dir_data, dir_name):
@@ -65,6 +67,8 @@ def load_from_dir_csv(load_from_dir_data, dir_name):
         for file in files:
             if file.endswith(".csv") and str.__contains__(file, 'Res'):
                 load_from_dir_data.append(file)
+
+    structure_results(load_from_dir_data)
 # <endregion>
 #######################################################################################################
 
@@ -384,7 +388,7 @@ def processing_page(files_chosen, caller_frame):
     # button for help
     customtkinter.CTkButton(processing_frame, text='STOP', width=170, height=48, fg_color="#EF5350",
                             hover_color="#424242", font=('Roboto', 18, 'bold'), corner_radius=5,
-                            command=lambda: results_page(client_list, 'Simone Cole',
+                            command=lambda: results_page(client_list, 'Patient39',
                                                          processing_frame)).place(x=275, y=445)
 
     tkb.Label(processing_frame, style='success', text=files_chosen, font=('Verdana', 13),
@@ -496,11 +500,11 @@ def results_page(cli_list, cli_opened, caller_frame):
     # getting all client names
     cli_names = []
     for cli in cli_list:
-        cli_names.append(cli.name)
+        cli_names.append(f"  {cli.name}  ")
 
-    customtkinter.CTkSegmentedButton(result_frame, values=cli_names, font=('Roboto', 15), height=30, fg_color='#616161',
-                                     selected_color='#4CAF50', unselected_hover_color='#212121', corner_radius=0,
-                                     selected_hover_color='#212121', unselected_color='#616161',
+    customtkinter.CTkSegmentedButton(result_frame, values=cli_names, font=('Roboto', 13), height=30, fg_color='#FFF',
+                                     text_color='#000', selected_color='#66BB6A', selected_hover_color='#A5D6A7',
+                                     unselected_color='#EEEEEE', unselected_hover_color='#C8E6C9',
                                      command=list_result).place(x=0, y=3)
 
     # recent results panel
