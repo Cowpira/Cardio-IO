@@ -11,11 +11,9 @@ class UserGuide:
         self.window.title("User Guide")
 
         # set the window
-        height = 400
-        width = 428
-        x = (self.window.winfo_screenwidth() // 2) - (width // 2)
-        y = (self.window.winfo_screenheight() // 2) - (height // 3)
-        self.window.geometry('{}x{}+{}+{}'.format(width, height, x, y))
+        x = (self.window.winfo_screenwidth() // 2) - (470 // 2)
+        y = (self.window.winfo_screenheight() // 2) - (520 // 3)
+        self.window.geometry('{}x{}+{}+{}'.format(470, 520, x, y))
         self.window.resizable(False, False)
         self.window.scrollable_frame = tk.Frame(self.window)
 
