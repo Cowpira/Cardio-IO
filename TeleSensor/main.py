@@ -35,19 +35,6 @@ from dialogs.metrics_desc import MetricsDesc
 from dialogs.user_guide import UserGuide
 
 
-#######################################################################################################
-# <region desc="retrieving files from google drive">
-def load_gDrive_files():
-    dest_path = './Patient_Library'
-    # sys.argv[0]
-    URL = 'https://drive.google.com/drive/folders/1Wa__A5l9zIesIWsTHCXnPX4FSwn-VBuD?usp=share_link'
-
-    if URL.split('/')[-1] == 'usp=share_link':
-        URL = URL.replace('usp=share_link', '')
-
-    gdown.download_folder(URL, output=dest_path)
-#######################################################################################################
-
 
 #######################################################################################################
 # <region desc="getting all CSV files from a directory/ sub-directory">
